@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/yanin/OneDrive/Documents/data%20science%20course/projects/Job%20Posting%20Project/mlruns/671648043018951245/aa5b94f3ad164d1cafae01b68a86ea93/artifacts
+end_time: 1739897796543
+entry_point_name: ''
+experiment_id: '671648043018951245'
+lifecycle_stage: active
+run_id: aa5b94f3ad164d1cafae01b68a86ea93
+run_name: melodic-crow-774
+run_uuid: aa5b94f3ad164d1cafae01b68a86ea93
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739897730041
+status: 3
+tags: []
+user_id: yanin
