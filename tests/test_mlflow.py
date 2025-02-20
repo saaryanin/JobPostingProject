@@ -1,46 +1,49 @@
 import requests
 import json
-import numpy as np
 import torch
+import pandas as pd
 from transformers import AutoTokenizer
 
-# Define the MLflow API endpoint
+# ✅ MLflow API Endpoint
 MLFLOW_ENDPOINT = "http://127.0.0.1:5001/invocations"
 
-# Load the tokenizer
+# ✅ Load Tokenizer
 MODEL_NAME = "bert-base-uncased"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
-# Example text input
+# ✅ Example Input Text
 text_inputs = [
     "This is a great opportunity to work as a Data Scientist at a top company.",
     "Make money fast! Work from home, no experience needed!"
 ]
 
-# Tokenize inputs the same way as in training
+# ✅ Tokenize Inputs
 tokenized_inputs = tokenizer(
     text_inputs,
     padding="max_length",
     truncation=True,
     max_length=128,
-    return_tensors="pt"  # `pt` ensures PyTorch tensors
+    return_tensors="pt"
 )
 
-# Convert input tensors to lists, ensuring they are integers (LongTensor)
-input_ids = tokenized_inputs["input_ids"].to(torch.long).tolist()  # Cast to int
-attention_mask = tokenized_inputs["attention_mask"].to(torch.long).tolist()
+# ✅ Ensure `torch.int64` (LongTensor)
+input_ids = tokenized_inputs["input_ids"].to(dtype=torch.int64).tolist()  # ✅ Fixed dtype
+attention_mask = tokenized_inputs["attention_mask"].to(dtype=torch.int64).tolist()  # ✅ Fixed dtype
 
-# Create the properly formatted JSON request payload
+# ✅ Convert to Pandas DataFrame (Required for MLflow)
+df_input = pd.DataFrame(
+    input_ids,
+    columns=[f"feature_{i}" for i in range(len(input_ids[0]))]
+)
+
+# ✅ Convert DataFrame to JSON (MLflow expects `dataframe_split` format)
 data = {
-    "dataframe_split": {
-        "columns": [f"feature_{i}" for i in range(128)],  # MLflow expects 128 feature columns
-        "data": input_ids  # Ensure we send correctly formatted input IDs
-    }
+    "dataframe_split": df_input.to_dict(orient="split")
 }
 
-# Send request to MLflow model
+# ✅ Send Request to MLflow Model
 headers = {"Content-Type": "application/json"}
 response = requests.post(MLFLOW_ENDPOINT, data=json.dumps(data), headers=headers)
 
-# Print response
+# ✅ Print Response
 print("Response:", response.json())
