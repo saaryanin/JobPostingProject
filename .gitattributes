@@ -1,3 +1,7 @@
-*.csv filter=lfs diff=lfs merge=lfs -text
-models/* filter=lfs diff=lfs merge=lfs -text
-datasets/fake_job_postings.csv filter=lfs diff=lfs merge=lfs -text
+# Track PyTorch models with LFS
+*.pth filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+
+# Track datasets/binaries
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.h5 filter=lfs diff=lfs merge=lfs -text
